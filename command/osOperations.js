@@ -2,6 +2,9 @@ const os = require('os');
 
 const handleOsCommand = (command, printCurrentDirectory) => {
   switch (command) {
+    case 'os --EOL':
+      console.log(JSON.stringify(os.EOL));
+      break;
     case 'os --cpus':
       console.log(os.cpus());
       break;

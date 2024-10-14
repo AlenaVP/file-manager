@@ -1,24 +1,34 @@
-const { createReadStream } = require('fs');
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
 
-const handleHashCommand = (command, printCurrentDirectory) => {
-  const [operation, filePath] = command.split(' ');
+const handleHashCommand = (command, currentDir, printCurrentDirectory) => {
+  const [operation, ...args] = command.split(' ');
 
   if (operation === 'hash') {
+    const filePath = path.resolve(currentDir, args[0]);
     const hash = crypto.createHash('sha256');
-    const input = createReadStream(filePath);
+    const readStream = fs.createReadStream(filePath);
 
-    input.on('readable', () => {
-      const data = input.read();
-      if (data) {
-        hash.update(data);
+    readStream.on('data', (chunk) => {
+      hash.update(chunk);
+    });
+
+    readStream.on('end', () => {
+      console.log(hash.digest('hex'));
+      printCurrentDirectory();
+    });
+
+    readStream.on('error', (error) => {
+      if (error.code === 'ENOENT') {
+        console.log(`File not found: ${filePath}`);
       } else {
-        console.log(hash.digest('hex'));
-        printCurrentDirectory();
+        console.log('Unable to calculate hash', error);
       }
+      printCurrentDirectory();
     });
   } else {
-    console.log('Invalid input');
+    console.log('Invalid hash command');
     printCurrentDirectory();
   }
 };

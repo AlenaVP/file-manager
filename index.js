@@ -42,7 +42,7 @@ rl.on('line', async (input) => {
   } else if (command.startsWith('read') || command.startsWith('write')) {
     handleStreamCommand(command, printCurrentDirectory);
   } else if (command.startsWith('hash')) {
-    handleHashCommand(command, printCurrentDirectory);
+    handleHashCommand(command, currentDir, printCurrentDirectory);
   } else if (command.startsWith('compress') || command.startsWith('decompress')) {
     handleCompressCommand(command, printCurrentDirectory);
   } else {

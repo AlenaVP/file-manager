@@ -7,14 +7,12 @@ const handleOsCommand = require('./command/osOperations');
 const handleHashCommand = require('./command/hashOperations');
 const handleCompressCommand = require('./command/compressOperations');
 
-// Parse command line arguments
 const args = process.argv.slice(2);
 const usernameArg = args.find(arg => arg.startsWith('--username='));
 const username = usernameArg ? usernameArg.split('=')[1] : 'User';
 
 console.log(`Welcome to the File Manager, ${username}!`);
 
-// Setup readline interface
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -27,9 +25,12 @@ const printCurrentDirectory = () => {
   console.log(`You are currently in ${currentDir}`);
 };
 
+const setCurrentDir = (newDir) => {
+  currentDir = newDir;
+};
+
 printCurrentDirectory();
 
-// Main command handler
 rl.on('line', async (input) => {
   const command = input.trim();
 
@@ -45,7 +46,8 @@ rl.on('line', async (input) => {
   } else if (command.startsWith('compress') || command.startsWith('decompress')) {
     handleCompressCommand(command, printCurrentDirectory);
   } else {
-    await handleFileCommand(command, printCurrentDirectory);
+    await handleFileCommand(command, currentDir, setCurrentDir, printCurrentDirectory);
+    printCurrentDirectory();
   }
 });
 

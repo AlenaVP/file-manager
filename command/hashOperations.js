@@ -1,6 +1,7 @@
+const { createReadStream } = require('fs');
 const crypto = require('crypto');
 
-const handleHashCommand = (command) => {
+const handleHashCommand = (command, printCurrentDirectory) => {
   const [operation, filePath] = command.split(' ');
 
   if (operation === 'hash') {
@@ -22,19 +23,4 @@ const handleHashCommand = (command) => {
   }
 };
 
-rl.on('line', async (input) => {
-  const command = input.trim();
-
-  if (command === '.exit') {
-    console.log(`Thank you for using File Manager, ${username}, goodbye!`);
-    rl.close();
-  } else if (command.startsWith('os')) {
-    handleOsCommand(command);
-  } else if (command.startsWith('read') || command.startsWith('write')) {
-    handleStreamCommand(command);
-  } else if (command.startsWith('hash')) {
-    handleHashCommand(command);
-  } else {
-    await handleCommand(command);
-  }
-});
+module.exports = handleHashCommand;

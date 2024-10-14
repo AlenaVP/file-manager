@@ -1,4 +1,6 @@
-const handleOsCommand = (command) => {
+const os = require('os');
+
+const handleOsCommand = (command, printCurrentDirectory) => {
   switch (command) {
     case 'os --cpus':
       console.log(os.cpus());
@@ -19,17 +21,4 @@ const handleOsCommand = (command) => {
   printCurrentDirectory();
 };
 
-rl.on('line', async (input) => {
-  const command = input.trim();
-
-  if (command === '.exit') {
-    console.log(`Thank you for using File Manager, ${username}, goodbye!`);
-    rl.close();
-  } else if (command.startsWith('os')) {
-    handleOsCommand(command);
-  } else if (command.startsWith('read') || command.startsWith('write')) {
-    handleStreamCommand(command);
-  } else {
-    await handleCommand(command);
-  }
-});
+module.exports = handleOsCommand;

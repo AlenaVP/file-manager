@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 
-const handleCommand = async (command) => {
+const handleFileCommand = async (command, printCurrentDirectory) => {
   const [operation, ...args] = command.split(' ');
 
   try {
@@ -31,13 +31,4 @@ const handleCommand = async (command) => {
   printCurrentDirectory();
 };
 
-rl.on('line', async (input) => {
-  const command = input.trim();
-
-  if (command === '.exit') {
-    console.log(`Thank you for using File Manager, ${username}, goodbye!`);
-    rl.close();
-  } else {
-    await handleCommand(command);
-  }
-});
+module.exports = handleFileCommand;

@@ -1,6 +1,6 @@
 const { createReadStream, createWriteStream } = require('fs');
 
-const handleStreamCommand = (command) => {
+const handleStreamCommand = (command, printCurrentDirectory) => {
   const [operation, ...args] = command.split(' ');
 
   switch (operation) {
@@ -20,15 +20,4 @@ const handleStreamCommand = (command) => {
   }
 };
 
-rl.on('line', async (input) => {
-  const command = input.trim();
-
-  if (command === '.exit') {
-    console.log(`Thank you for using File Manager, ${username}, goodbye!`);
-    rl.close();
-  } else if (command.startsWith('read') || command.startsWith('write')) {
-    handleStreamCommand(command);
-  } else {
-    await handleCommand(command);
-  }
-});
+module.exports = handleStreamCommand;
